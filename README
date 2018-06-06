@@ -1,0 +1,45 @@
+Papacica Elena-Daniela
+323 CB
+
+
+				Tema 3 - POO
+
+
+-> Citiri, afisari si constructia labirintului
+
+	Am folosit un HomeworkReader pentru a citi datele din fisier(inaltimea si latimea matricei de simboluri si matricea propriu-zisa)
+	Pentru afisare in fisier folosesc metoda printLn din clasa HomeworkWriter
+	Clasa Maze contine o matrice de elemente de tip Cell (clasa abstracta), precum si latimea, inaltimea acesteia, si cate un camp care salveaza pozitia curenta si orientarea curenta.
+	Folosind un factory, instantiez fiecare Cell din matrice cu un subtip (care extinde Cell) corespunzator:
+	pentru "." si "I" => NormalCell
+	pentru "#" => WallCell
+	pentru "O" => OutputCell
+
+	Realizarea tabelei si setarea celorlalte date din Maze(pozitia initiala pe pozitia unde se afla I, inaltime,lungime, orientare) se face in constructor.
+
+
+
+-> Rezolvarea Taskului 1
+
+	Fiecare celula de tip NormalCell contine un numar care reprezinta de cate ori a fost vizitata dar si o lista de vecini (Neighbour).
+	Clasa Neighbour contine celula vecina celulei curente dar si un string ce semnifica pozitia relativa la celula curenta ("up", "down", "left", "right")
+	Maze contine si un NeighbourComparator(implementeaza Comparator). Comparatorul primeste 2 obiecte de tip Neighbour si stabileste prioritatea dintre acestia dupa urmatoarele criterii:
+	- daca unul dintre vecini este OutputCell are prioritate
+	- daca unul dintre vecini nu exista (Celula se afla la margine) sau este WallCell nu are prioritate, iar daca amandoi vecinii au aceasta problema niciunul nu va avea prioritate
+	- in cazul in care sunt 2 celule vizitabile normale (NormalCell) prioritatea se stabileste in primul rand dupa numarul de vizitari si in al doilea rand dupa directia prioritara (in functie de orientarea curenta care este de asemenea un camp din comparator si care se seteaza la fiecare pas cand eroul navigheaza prin labirint)
+
+	Metoda Navigate_Task1 din Maze foloseste un comparator pentru a-l ajuta de erou sa mearga prin labirint. Comparatorul ajuta la sortarea tuturor vecinilor unei celule pentru ca eroul sa o aleaga pe prima. Procedura se repeta din celula in celula pana cand eroul ajunge la destinatie. Fiecare pozitie pe care a pasit este salvata intr-o lista care va fi afisata la final.
+
+
+
+
+-> Rezolvarea Taskului 2
+	
+	Pentru acest task voi pleca din celula initiala si voi pune intr-o coada toate celulele vecine pe care eroul ar putea merge(celule valide). La fiecare pas se va extrage din coada un nou element, adica o noua celula. Vecinii noii celule (doar aceia care nu au mai fost pusi in coada) vor fi la randul lor introdusi.
+	Pentru a retine care celule au mai fost introduse in coada folosesc o matrice de intregi de dimensiunile matricei de celule, dar doar cu elemente de 0 si 1 (0-celula noua, nu a mai fost vizitata; 1 - celula a mai fost vizitata).
+	La un moment vecinul unei celule va fi portalul de iesire. Pentru a retine drumul pana la portal, modul in care celulele sunt introduse in coada este urmatorul:
+	- folosesc o noua clasa CellNode care contine atat pozitia celulei vecine cat si o referinta catre celula anterioara si numarul de celule parcurse pana in acel moment. Deci coada este de fapt o coada de <CellNode>.
+	Astfel, in momentul in care destinatia este atinsa, programul creeaza o stiva cu toate pozitiile parcurse mergand "inapoi" din referinta in referinta catre nodul anterior pana se ajunge la celula de start.
+	La final atat lungimea drumului cat si toate pozitiile salvate in stiva vor fi afisate.
+
+
